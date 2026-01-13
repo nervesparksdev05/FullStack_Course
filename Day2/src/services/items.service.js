@@ -1,6 +1,6 @@
 const { ApiError } = require("../utils/ApiError");
 
-// In-memory store (replace with DB)
+// In-memory store 
 let ITEMS = [
   { id: "1", name: "First item", ownerId: "1" },
   { id: "2", name: "Second item", ownerId: "1" },
