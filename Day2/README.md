@@ -258,11 +258,3 @@ itemId = <set after creating item>
 
 ---
 
-## Production Notes
-
-* Replace in-memory stores with a database
-* Hash passwords using `bcrypt`
-* Add refresh tokens
-* Add role-based authorization
-
-

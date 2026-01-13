@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const { env } = require("../config/env");
 
-// Demo user store (replace with DB later)
+// Demo user store 
 const USERS = [
   { id: "1", email: "user@demo.com", password: "user123", role: "user" },
 ];
