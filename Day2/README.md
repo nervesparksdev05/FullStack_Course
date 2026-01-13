@@ -1,259 +1,621 @@
-# Express JWT REST API
+# 🚀 Express JWT REST API
 
-A clean, structured **Express.js REST API** implementing **JWT authentication**, **environment-based configuration**, **centralized error handling**, and **CRUD endpoints**.  
-Designed as a **production-ready backend skeleton**.
+<div align="center">
 
----
+![Node.js](https://img.shields.io/badge/Node.js-18+-green)
+![Express](https://img.shields.io/badge/Express-4.18-blue)
+![JWT](https://img.shields.io/badge/JWT-9.0-orange)
+![License](https://img.shields.io/badge/License-MIT-yellow)
 
-## Features
+**Production-ready Express.js REST API with JWT authentication, modular architecture, and comprehensive error handling**
 
-- Express server with **modular folder architecture**
-- **JWT Authentication**
-  - Token generation
-  - Token verification middleware
-- **Environment variables** using `.env`
-- **Centralized error handling middleware**
-- **RESTful CRUD API**
-- Async error-safe controllers
+[Features](#-features) • [Quick Start](#-quick-start) • [Architecture](#-architecture) • [API Docs](#-api-documentation)
+
+</div>
 
 ---
 
-## Tech Stack
+## 📋 Table of Contents
 
-- **Node.js**
-- **Express.js**
-- **JWT (jsonwebtoken)**
-- **dotenv**
-- **Morgan**
-- **CORS**
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Project Structure](#-project-structure)
+- [Quick Start](#-quick-start)
+- [API Documentation](#-api-documentation)
+- [Authentication Flow](#-authentication-flow)
+- [Architecture](#-architecture)
+- [Security](#-security)
+- [Error Handling](#-error-handling)
+- [Testing](#-testing)
+- [Deployment](#-deployment)
 
 ---
 
-## Project Structure
+## ✨ Features
+
+### Core Features
+✅ **JWT Authentication** - Secure token-based auth with refresh tokens  
+✅ **RESTful API** - Clean, semantic endpoints following REST principles  
+✅ **Modular Architecture** - Separation of concerns (routes, controllers, services)  
+✅ **Centralized Error Handling** - Consistent error responses  
+✅ **Async/Await** - Modern async patterns with error handling  
+✅ **Environment Configuration** - Flexible config with dotenv  
+✅ **CORS Support** - Configurable cross-origin resource sharing  
+✅ **Rate Limiting** - Protection against brute force attacks  
+
+### Technical Features
+⚡ **Express.js** - Fast, unopinionated web framework  
+🔒 **Helmet** - Security headers  
+📝 **Morgan** - HTTP request logging  
+🛡️ **Input Validation** - Request validation  
+🎯 **Repository Pattern** - Clean data access layer  
+🔑 **Bcrypt** - Secure password hashing  
+🚦 **HTTP Status Codes** - Proper status code usage  
+
+---
+
+## 🧱 Tech Stack
+
+| Layer | Technology | Purpose |
+|-------|------------|---------|
+| Framework | Express.js 4.18 | Web framework |
+| Authentication | JWT (jsonwebtoken) | Token-based auth |
+| Security | Helmet + bcryptjs | Security headers & password hashing |
+| CORS | cors | Cross-origin requests |
+| Logging | Morgan | HTTP request logging |
+| Rate Limiting | express-rate-limit | DDoS protection |
+| Environment | dotenv | Configuration management |
+
+---
+
+## 📁 Project Structure
 
 ```
-
 express-jwt-api/
-├─ package.json
-├─ .env
-├─ .env.example
-├─ README.md
-└─ src/
-├─ server.js
-├─ app.js
-├─ config/
-│  └─ env.js
-├─ routes/
-│  ├─ index.js
-│  ├─ auth.routes.js
-│  └─ items.routes.js
-├─ controllers/
-│  ├─ auth.controller.js
-│  └─ items.controller.js
-├─ services/
-│  ├─ auth.service.js
-│  └─ items.service.js
-├─ middleware/
-│  ├─ auth.middleware.js
-│  └─ error.middleware.js
-└─ utils/
-├─ asyncHandler.js
-└─ ApiError.js
+├── src/
+│   ├── server.js                 # Server entry point
+│   ├── app.js                    # Express app configuration
+│   │
+│   ├── config/
+│   │   └── env.js                # Environment configuration
+│   │
+│   ├── routes/
+│   │   ├── index.js              # Main routes aggregator
+│   │   ├── auth.routes.js        # Authentication routes
+│   │   └── items.routes.js       # Items CRUD routes
+│   │
+│   ├── controllers/
+│   │   ├── auth.controller.js    # Auth HTTP handlers
+│   │   └── items.controller.js   # Items HTTP handlers
+│   │
+│   ├── services/
+│   │   ├── auth.service.js       # Auth business logic
+│   │   └── items.service.js      # Items business logic
+│   │
+│   ├── middleware/
+│   │   ├── auth.middleware.js    # JWT verification
+│   │   └── error.middleware.js   # Error handling
+│   │
+│   └── utils/
+│       ├── ApiError.js           # Custom error class
+│       ├── ApiResponse.js        # Response formatter
+│       └── asyncHandler.js       # Async wrapper
+│
+├── docs/                          # Documentation
+├── tests/                         # Test files
+├── package.json
+├── .env.example
+├── .gitignore
+└── README.md
+```
 
-````
+### Directory Responsibilities
+
+- **`config/`** - Application configuration and environment variables
+- **`routes/`** - Route definitions and endpoint mapping
+- **`controllers/`** - HTTP request handlers
+- **`services/`** - Business logic and data operations
+- **`middleware/`** - Custom middleware (auth, error handling)
+- **`utils/`** - Utility functions and helpers
+- **`docs/`** - API documentation and architecture diagrams
 
 ---
 
-## Setup Instructions
+## 🚀 Quick Start
 
-### 1. Install dependencies
+### Prerequisites
+- **Node.js 18+**
+- **npm 9+**
+
+### Step 1: Install Dependencies
 
 ```bash
+cd express-jwt-api
 npm install
-````
+```
 
-### 2. Environment configuration
+### Step 2: Configure Environment
 
-Create a `.env` file in the root directory:
+```bash
+cp .env.example .env
+```
+
+Edit `.env`:
 
 ```env
 PORT=3000
 NODE_ENV=development
-
-JWT_SECRET=super_long_random_secret_value
+JWT_SECRET=your-super-secret-jwt-key-change-in-production
 JWT_EXPIRES_IN=1h
+CORS_ORIGIN=http://localhost:3000
 ```
 
----
+**Generate secure JWT secret:**
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
 
-### 3. Run the server
+### Step 3: Run Server
 
 ```bash
+# Development with auto-reload
 npm run dev
+
+# Production
+npm start
 ```
 
-Server will start at:
-
-```
-http://localhost:3000
-```
+Server starts at: **http://localhost:3000**
 
 ---
 
-## API Endpoints
+## 📚 API Documentation
 
-### Health Check
+### Base URL
+```
+http://localhost:3000/api
+```
 
-```
-GET /health
-```
+### Endpoints Overview
+
+#### 🔓 Public Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/health` | Health check |
+| POST | `/api/auth/login` | Login with credentials |
+| POST | `/api/auth/register` | Register new user |
+| POST | `/api/auth/refresh` | Refresh access token |
+
+#### 🔒 Protected Endpoints (Require JWT)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/auth/me` | Get current user |
+| POST | `/api/auth/logout` | Logout user |
+| GET | `/api/items` | Get all items |
+| GET | `/api/items/my-items` | Get user's items |
+| GET | `/api/items/:id` | Get item by ID |
+| POST | `/api/items` | Create new item |
+| PUT | `/api/items/:id` | Update item (owner only) |
+| DELETE | `/api/items/:id` | Delete item (owner only) |
 
 ---
 
-## Authentication
+## 🔐 Authentication Flow
 
-### Login (Generate JWT)
+### Complete Authentication Journey
 
 ```
-POST /api/auth/login
+┌──────────┐                                  ┌──────────┐
+│  Client  │                                  │  Server  │
+└────┬─────┘                                  └────┬─────┘
+     │                                             │
+     │  1. POST /api/auth/register                │
+     │     {email, password, name}                │
+     ├────────────────────────────────────────────▶
+     │                                             │
+     │                           2. Hash password  │
+     │                           3. Create user    │
+     │                           4. Generate JWT   │
+     │                                             │
+     │  5. Return {user, token, refreshToken}      │
+     ◀────────────────────────────────────────────┤
+     │                                             │
+     │  6. POST /api/auth/login                   │
+     │     {email, password}                       │
+     ├────────────────────────────────────────────▶
+     │                                             │
+     │                           7. Verify password│
+     │                           8. Generate JWT   │
+     │                                             │
+     │  9. Return {user, token, refreshToken}      │
+     ◀────────────────────────────────────────────┤
+     │                                             │
+     │  10. GET /api/items                        │
+     │      Authorization: Bearer <token>          │
+     ├────────────────────────────────────────────▶
+     │                                             │
+     │                          11. Verify JWT     │
+     │                          12. Attach user    │
+     │                          13. Execute route  │
+     │                                             │
+     │  14. Return items                           │
+     ◀────────────────────────────────────────────┤
 ```
 
-**Request Body**
+### 1️⃣ Register New User
 
-```json
-{
-  "email": "demo@demo.com",
-  "password": "demo123"
-}
+```bash
+curl -X POST http://localhost:3000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "newuser@example.com",
+    "password": "secure123",
+    "name": "New User"
+  }'
 ```
 
-**Response**
-
+**Response:**
 ```json
 {
   "success": true,
-  "token": "JWT_TOKEN",
-  "user": {
-    "id": "1",
-    "email": "demo@demo.com",
-    "role": "user"
+  "message": "Registration successful",
+  "data": {
+    "user": {
+      "id": "3",
+      "email": "newuser@example.com",
+      "name": "New User",
+      "role": "user"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
   }
 }
 ```
 
----
+### 2️⃣ Login
 
-### Get Current User (JWT Protected)
-
-```
-GET /api/auth/me
-```
-
-**Headers**
-
-```
-Authorization: Bearer <JWT_TOKEN>
+```bash
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "demo@demo.com",
+    "password": "demo123"
+  }'
 ```
 
----
-
-## Items CRUD (JWT Required)
-
-All endpoints below require:
-
-```
-Authorization: Bearer <JWT_TOKEN>
-```
-
-### Get All Items
-
-```
-GET /api/items
-```
-
-### Get Item by ID
-
-```
-GET /api/items/:id
-```
-
-### Create Item
-
-```
-POST /api/items
-```
-
-**Body**
-
+**Response:**
 ```json
 {
-  "name": "My Item"
+  "success": true,
+  "message": "Login successful",
+  "data": {
+    "user": {
+      "id": "1",
+      "email": "demo@demo.com",
+      "role": "user",
+      "name": "Demo User"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  }
 }
 ```
 
----
+### 3️⃣ Access Protected Routes
 
-### Update Item
-
-```
-PUT /api/items/:id
-```
-
-**Body**
-
-```json
-{
-  "name": "Updated Item Name"
-}
+```bash
+curl -X GET http://localhost:3000/api/items \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 ```
 
----
+### 4️⃣ Refresh Token
 
-### Delete Item
-
-```
-DELETE /api/items/:id
+```bash
+curl -X POST http://localhost:3000/api/auth/refresh \
+  -H "Content-Type: application/json" \
+  -d '{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  }'
 ```
 
 ---
 
-## Error Handling
+## 🏗️ Architecture
 
-* Centralized error middleware
-* Consistent error response format
-* HTTP status-based error handling
-* Stack traces shown only in development mode
+### High-Level Architecture
 
-**Example**
+```
+┌──────────────┐
+│   Clients    │  (Web, Mobile, Postman)
+└──────┬───────┘
+       │ HTTP/HTTPS
+       ▼
+┌─────────────────────────┐
+│  Express.js Server      │
+│  ┌───────────────────┐  │
+│  │   Middleware      │  │
+│  │  - Helmet         │  │
+│  │  - CORS           │  │
+│  │  - Rate Limit     │  │
+│  │  - Morgan         │  │
+│  └────────┬──────────┘  │
+│           │              │
+│  ┌────────▼──────────┐  │
+│  │   Routes          │  │
+│  │  /auth, /items    │  │
+│  └────────┬──────────┘  │
+│           │              │
+│  ┌────────▼──────────┐  │
+│  │  Auth Middleware  │  │
+│  │  (JWT Verify)     │  │
+│  └────────┬──────────┘  │
+│           │              │
+│  ┌────────▼──────────┐  │
+│  │   Controllers     │  │
+│  │  (HTTP Handlers)  │  │
+│  └────────┬──────────┘  │
+│           │              │
+│  ┌────────▼──────────┐  │
+│  │   Services        │  │
+│  │  (Business Logic) │  │
+│  └────────┬──────────┘  │
+│           │              │
+│  ┌────────▼──────────┐  │
+│  │  Error Handler    │  │
+│  │  (Centralized)    │  │
+│  └───────────────────┘  │
+└─────────────────────────┘
+```
+
+### Request Flow
+
+```
+1. Request arrives at Express server
+   ↓
+2. Security middleware (Helmet, CORS, Rate Limit)
+   ↓
+3. Body parsing middleware
+   ↓
+4. Logging middleware (Morgan)
+   ↓
+5. Route matching
+   ↓
+6. Authentication middleware (if protected route)
+   ↓
+7. Controller (HTTP request handler)
+   ↓
+8. Service (business logic)
+   ↓
+9. Response formatting
+   ↓
+10. Error handling (if error occurs)
+    ↓
+11. Send response to client
+```
+
+---
+
+## 🔒 Security
+
+### Implemented Security Measures
+
+#### 1. Password Security
+✅ Bcrypt hashing with configurable rounds  
+✅ Minimum 6 characters enforced  
+✅ Never stored in plain text  
+✅ Never returned in API responses
+
+#### 2. JWT Security
+✅ HS256 algorithm  
+✅ Configurable expiration (default 1h)  
+✅ Refresh tokens (7 days)  
+✅ Bearer token scheme
+
+#### 3. HTTP Security Headers (Helmet)
+✅ Content Security Policy  
+✅ X-Frame-Options  
+✅ X-Content-Type-Options  
+✅ Strict-Transport-Security
+
+#### 4. Rate Limiting
+✅ 100 requests per 15 minutes per IP  
+✅ Configurable limits  
+✅ Standard headers
+
+#### 5. CORS
+✅ Configurable allowed origins  
+✅ Credentials support  
+✅ Preflight request handling
+
+#### 6. Input Validation
+✅ Request body validation  
+✅ Email format validation  
+✅ Password strength checks
+
+---
+
+## 🛠️ Error Handling
+
+### Centralized Error System
+
+All errors are handled through a centralized middleware that provides consistent error responses.
+
+### Error Response Format
 
 ```json
 {
   "success": false,
-  "message": "Invalid or expired token"
+  "message": "Error message here"
+}
+```
+
+### Development Mode (includes stack trace)
+
+```json
+{
+  "success": false,
+  "message": "Error message",
+  "stack": "Error stack trace...",
+  "url": "/api/items/123",
+  "method": "GET"
+}
+```
+
+### Common Error Codes
+
+| Status | Meaning | Example |
+|--------|---------|---------|
+| 400 | Bad Request | Missing required fields |
+| 401 | Unauthorized | Invalid or missing token |
+| 403 | Forbidden | Insufficient permissions |
+| 404 | Not Found | Resource doesn't exist |
+| 409 | Conflict | Email already registered |
+| 500 | Internal Server Error | Unexpected error |
+
+---
+
+## 🧪 Testing
+
+### Manual Testing
+
+```bash
+# Health check
+curl http://localhost:3000/health
+
+# Register
+curl -X POST http://localhost:3000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@test.com","password":"test123","name":"Test User"}'
+
+# Login
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@test.com","password":"test123"}'
+
+# Get items (requires token)
+curl http://localhost:3000/api/items \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+### Using Postman
+
+1. Import collection (create from endpoints above)
+2. Set environment variables:
+   - `baseUrl`: `http://localhost:3000`
+   - `token`: Set after login
+3. Test all endpoints
+
+---
+
+## 🚀 Deployment
+
+### Production Configuration
+
+```env
+NODE_ENV=production
+PORT=80
+JWT_SECRET=<64-char-random-string>
+CORS_ORIGIN=https://yourdomain.com
+RATE_LIMIT_MAX_REQUESTS=100
+```
+
+### Using PM2
+
+```bash
+npm install -g pm2
+pm2 start src/server.js --name express-api
+pm2 save
+pm2 startup
+```
+
+### Using Docker
+
+```dockerfile
+FROM node:18-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+COPY . .
+EXPOSE 3000
+CMD ["node", "src/server.js"]
+```
+
+### Nginx Reverse Proxy
+
+```nginx
+server {
+    listen 80;
+    server_name api.yourdomain.com;
+    
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
 }
 ```
 
 ---
 
-## Authentication Flow
+## 📝 Complete Example
 
-1. User logs in with credentials
-2. Server returns JWT token
-3. Client stores token
-4. Token sent in `Authorization` header
-5. Middleware verifies token
-6. Protected routes grant access
+```javascript
+const axios = require('axios');
 
----
+const BASE_URL = 'http://localhost:3000/api';
+let token;
 
-## Postman Setup
+async function runDemo() {
+  // 1. Register
+  const registerRes = await axios.post(`${BASE_URL}/auth/register`, {
+    email: 'demo@example.com',
+    password: 'demo123',
+    name: 'Demo User'
+  });
+  console.log('✅ Registered:', registerRes.data.data.user.email);
 
-Create environment variables:
+  // 2. Login
+  const loginRes = await axios.post(`${BASE_URL}/auth/login`, {
+    email: 'demo@example.com',
+    password: 'demo123'
+  });
+  token = loginRes.data.data.token;
+  console.log('✅ Logged in, got token');
 
-```
-baseUrl = http://localhost:3000
-token = <set after login>
-itemId = <set after creating item>
+  // 3. Create Item
+  const itemRes = await axios.post(`${BASE_URL}/items`, 
+    { name: 'My Item', description: 'Test item' },
+    { headers: { Authorization: `Bearer ${token}` }}
+  );
+  console.log('✅ Created item:', itemRes.data.data.item.name);
+
+  // 4. Get My Items
+  const myItemsRes = await axios.get(`${BASE_URL}/items/my-items`,
+    { headers: { Authorization: `Bearer ${token}` }}
+  );
+  console.log('✅ My items count:', myItemsRes.data.data.total);
+
+  // 5. Update Item
+  const itemId = itemRes.data.data.item.id;
+  await axios.put(`${BASE_URL}/items/${itemId}`,
+    { name: 'Updated Item' },
+    { headers: { Authorization: `Bearer ${token}` }}
+  );
+  console.log('✅ Updated item');
+
+  // 6. Delete Item
+  await axios.delete(`${BASE_URL}/items/${itemId}`,
+    { headers: { Authorization: `Bearer ${token}` }}
+  );
+  console.log('✅ Deleted item');
+}
+
+runDemo().catch(console.error);
 ```
 
 ---
