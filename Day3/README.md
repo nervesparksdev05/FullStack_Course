@@ -345,44 +345,4 @@ CORS_ORIGINS=["https://yourdomain.com"]
 DEBUG=false
 ```
 
-## 📝 Complete Example
-
-```python
-import requests
-
-BASE = "http://127.0.0.1:8000"
-
-# 1. Register
-r = requests.post(f"{BASE}/auth/register", 
-    json={"email":"john@example.com","password":"secure123"})
-print("✅ Registered:", r.json()['email'])
-
-# 2. Login
-r = requests.post(f"{BASE}/auth/token",
-    data={"username":"john@example.com","password":"secure123"})
-token = r.json()["access_token"]
-headers = {"Authorization": f"Bearer {token}"}
-print("✅ Got token")
-
-# 3. Create Item
-r = requests.post(f"{BASE}/items/", headers=headers,
-    json={"title":"My Item","description":"Test"})
-item_id = r.json()["id"]
-print("✅ Created item:", item_id)
-
-# 4. Get Items
-r = requests.get(f"{BASE}/items/my-items", headers=headers)
-print("✅ My items:", len(r.json()))
-
-# 5. Update Item
-r = requests.put(f"{BASE}/items/{item_id}", headers=headers,
-    json={"title":"Updated Title"})
-print("✅ Updated:", r.json()['title'])
-
-# 6. Delete Item
-r = requests.delete(f"{BASE}/items/{item_id}", headers=headers)
-print("✅ Deleted item")
-```
-
----
 
